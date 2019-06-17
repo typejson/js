@@ -1,0 +1,18 @@
+{
+  "name": "typejson",
+  "version": "0.9.0",
+  "description": "typejson",
+  "main": "lib/index.js",
+  "repository": "https://github.com/typejson/js.git",
+  "author": "github/nimojs",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["node_modules", "src"]
+  }
+}
