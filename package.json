@@ -7,7 +7,7 @@
   "author": "github/nimojs",
   "license": "MIT",
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --coverage --watch"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

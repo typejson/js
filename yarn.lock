@@ -2929,7 +2929,7 @@ type-check@~0.3.2:
 
 typeof@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npm.taobao.org/typeof/download/typeof-1.0.0.tgz#9c84403f2323ae5399167275497638ea1d2f2440"
+  resolved "https://registry.yarnpkg.com/typeof/-/typeof-1.0.0.tgz#9c84403f2323ae5399167275497638ea1d2f2440"
 
 typescript@^3.5.2:
   version "3.5.2"

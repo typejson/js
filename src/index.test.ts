@@ -46,6 +46,19 @@ test('type.number string transform number', () => {
   let output:any = {"age": 1}
   expect(tjson.parse(data, types)).toEqual(output);
 });
+test('type.number string transform number throw error', () => {
+  let tjson = new TypeJSON()
+  let data:any = {"age": "1e"}
+  let types: IF_Types = {
+    "age": {
+      type: "number"
+    }
+  }
+  let output:Error = new Error(`typejson: {\"age\":\"1e\"} attr is not a number`)
+  expect(function () {
+    tjson.parse(data, types)
+  }).toThrow(output)
+});
 test('type.number empty value', () => {
   let tjson = new TypeJSON()
   let data: any = {}
@@ -181,6 +194,25 @@ test('object.default', () => {
   expect(tjson.parse(data, types)).toEqual(output)
 })
 
+test('required and default warning', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+    name: "nimo"
+  }
+  let types: IF_Types = {
+    "name": {
+      type: "string",
+      default: "nico"
+    }
+  }
+  let _warn = console.warn
+  console.warn = function (message: any) {
+    expect(message).toEqual('typejson: attr: \"name\" requried attr can not have default, maybe you should remove default or add \"attr?\"')
+  }
+  tjson.parse(data, types)
+
+})
+
 test('deep level', () => {
   let tjson = new TypeJSON()
   let data: any = {}
@@ -243,10 +275,20 @@ test('type alias', () => {
 
   }
   let types: IF_Types = {
-    "date?": "date"
+    "date?": "date",
+    "url?": "url",
+    "uri?": "uri",
+    "uuid?": "uuid",
+    "num?": "num",
+    "boolean?": "boolean",
   }
   let output: any = {
-    date: ''
+    "date": "",
+    "url": "",
+    "uri": "",
+    "uuid": "",
+    "num": null,
+    "boolean": false,
   }
   expect(tjson.parse(data, types)).toEqual(output)
 })

@@ -1,4 +1,4 @@
-import { gettype } from "./gettype"
+const gettype = require("typeof")
 import { IF_TypeJSON, IF_Types } from "./interface"
 const merge = require('merge')
 
@@ -81,7 +81,7 @@ class TypeJSON implements IF_TypeJSON{
       }
       let hasDefault = typeItem.default !== undefined
       if (requried && hasDefault) {
-        console.warn(`typejson: attr: "${attr}" requried attr can not have default, maybe you `)
+        console.warn(`typejson: attr: "${attr}" requried attr can not have default, maybe you should remove default or add "attr?"`)
       }
       let shouldSetDefaultValue = !requried && hasDefault
       let shouldSetEmptyValue: boolean
