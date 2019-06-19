@@ -180,3 +180,141 @@ test('object.default', () => {
   }
   expect(tjson.parse(data, types)).toEqual(output)
 })
+
+test('deep level', () => {
+  let tjson = new TypeJSON()
+  let data: any = {}
+  let types: IF_Types = {
+    "person?": {
+      type: "object"
+    },
+    'person.children?': {
+      type: "object"
+    },
+    'person.children.son?':{
+      type: "string",
+      default: "fifteen"
+    }
+  }
+  let output: any = {
+    "person": {
+      "children": {
+        "son": "fifteen",
+      },
+    }
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+})
+
+test('type|note', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+    some: "a",
+    foo: 1
+  }
+  let types: IF_Types = {
+    "some": "string | 解释",
+    "foo": "number|解释2"
+  }
+  let output: any = {
+    some: "a",
+    foo: 1
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+})
+
+test('error type', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+    list: "abc"
+  }
+  let types: IF_Types = {
+    "list": "array"
+  }
+  let output:Error = new Error(`typejson: list(string) is not a array`)
+  expect(function () {
+    tjson.parse(data, types)
+  }).toThrow(output)
+})
+
+test('type alias', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+
+  }
+  let types: IF_Types = {
+    "date?": "date"
+  }
+  let output: any = {
+    date: ''
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+})
+
+
+test('not find type', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+
+  }
+  let types: IF_Types = {
+    "id?": "nobody"
+  }
+  let output:Error = new Error(`typejson: type must between ["string","number","num","object","array","uuid","date","url","uri","bool","boolean"], can not be a undefined`)
+  expect(function () {
+    tjson.parse(data, types)
+  }).toThrow(output)
+})
+
+
+test('deep level array', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+
+  }
+  let types: IF_Types = {
+    "some?": "array",
+    "some.*?": "object",
+    "some.*.abc": "string",
+  }
+  let output: any = {
+    some: []
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+})
+
+
+test('data have types', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+    "|name?": {
+      type: "string"
+    }
+  }
+  let types: IF_Types = {}
+  let output:any = {"name": ""}
+  expect(tjson.parse(data, types)).toEqual(output);
+});
+
+test('regexp', () => {
+  let tjson = new TypeJSON()
+  let data: any = {
+    name: "nimo"
+  }
+  let types: IF_Types = {
+    name: {
+      type: "string",
+      regexp: "nimo"
+    }
+  }
+  let output: any = {
+    name: "nimo"
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+
+  let outputError:Error = new Error(`typejson: regexp: nimo can not match free`)
+  expect(function () {
+    tjson.parse({name: "free"}, types)
+  }).toThrow(outputError)
+
+})
