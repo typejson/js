@@ -1,7 +1,9 @@
 import { TypeJSON } from "./index"
 import { IF_Types } from "./interface"
+
+let tjson = new TypeJSON()
 test('type.string empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "name": {
@@ -14,7 +16,7 @@ test('type.string empty value', () => {
   }).toThrow(output);
 });
 test('type.string? empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "name?": {
@@ -25,7 +27,7 @@ test('type.string? empty value', () => {
   expect(tjson.parse(data, types)).toEqual(output);
 });
 test('type.bool? empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "hot?": {
@@ -36,7 +38,7 @@ test('type.bool? empty value', () => {
   expect(tjson.parse(data, types)).toEqual(output);
 });
 test('type.number string transform number', () => {
-  let tjson = new TypeJSON()
+
   let data:any = {"age": "1"}
   let types: IF_Types = {
     "age": {
@@ -47,7 +49,7 @@ test('type.number string transform number', () => {
   expect(tjson.parse(data, types)).toEqual(output);
 });
 test('type.number string transform number throw error', () => {
-  let tjson = new TypeJSON()
+
   let data:any = {"age": "1e"}
   let types: IF_Types = {
     "age": {
@@ -60,7 +62,7 @@ test('type.number string transform number throw error', () => {
   }).toThrow(output)
 });
 test('type.number empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "age": {
@@ -73,7 +75,7 @@ test('type.number empty value', () => {
   }).toThrow(output)
 });
 test('type.array empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "list": {
@@ -87,7 +89,7 @@ test('type.array empty value', () => {
 });
 
 test('type.array? empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "list?": {
@@ -98,7 +100,7 @@ test('type.array? empty value', () => {
   expect(tjson.parse(data, types)).toEqual(output)
 });
 test('type.object empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "map": {
@@ -112,7 +114,7 @@ test('type.object empty value', () => {
 });
 
 test('type.object? empty value', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "map?": {
@@ -124,7 +126,7 @@ test('type.object? empty value', () => {
 });
 
 test('string.default', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "status?": {
@@ -137,7 +139,7 @@ test('string.default', () => {
 })
 
 test('number.default', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "page?": {
@@ -150,7 +152,7 @@ test('number.default', () => {
 })
 
 test('bool.default', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "opened?": {
@@ -163,7 +165,7 @@ test('bool.default', () => {
 })
 
 test('array.default', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "list?": {
@@ -176,7 +178,7 @@ test('array.default', () => {
 })
 
 test('object.default', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "map?": {
@@ -195,7 +197,7 @@ test('object.default', () => {
 })
 
 test('required and default warning', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
     name: "nimo"
   }
@@ -214,7 +216,7 @@ test('required and default warning', () => {
 })
 
 test('deep level', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {}
   let types: IF_Types = {
     "person?": {
@@ -239,7 +241,7 @@ test('deep level', () => {
 })
 
 test('type|note', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
     some: "a",
     foo: 1
@@ -256,7 +258,7 @@ test('type|note', () => {
 })
 
 test('error type', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
     list: "abc"
   }
@@ -270,7 +272,7 @@ test('error type', () => {
 })
 
 test('type alias', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
 
   }
@@ -295,7 +297,7 @@ test('type alias', () => {
 
 
 test('not find type', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
 
   }
@@ -310,7 +312,7 @@ test('not find type', () => {
 
 
 test('deep level array', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
 
   }
@@ -327,7 +329,7 @@ test('deep level array', () => {
 
 
 test('data have types', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
     "|name?": {
       type: "string"
@@ -337,9 +339,20 @@ test('data have types', () => {
   let output:any = {"name": ""}
   expect(tjson.parse(data, types)).toEqual(output);
 });
+test('omit types', () => {
+
+  let data: any = {
+    "|name?": {
+      type: "string"
+    }
+  }
+  let types: IF_Types = {}
+  let output:any = {"name": ""}
+  expect(tjson.parse(data)).toEqual(output);
+})
 
 test('regexp', () => {
-  let tjson = new TypeJSON()
+
   let data: any = {
     name: "nimo"
   }
@@ -359,4 +372,23 @@ test('regexp', () => {
     tjson.parse({name: "free"}, types)
   }).toThrow(outputError)
 
+})
+
+test('emptyObject.emptyObject.defaultValue?', () => {
+  expect(
+    tjson.parse({
+      '|form.project.title?': {
+        type: 'string',
+        default: 'some',
+      }
+    })
+  ).toEqual(
+    {
+      form: {
+        project: {
+          title: "some"
+        }
+      }
+    }
+  )
 })

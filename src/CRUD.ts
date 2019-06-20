@@ -1,3 +1,4 @@
+const log = console.log
 function createAndReturnValue (data: any, attrList: string[]) {
   let parentValue: any = data
   let targetValue: any
@@ -7,16 +8,18 @@ function createAndReturnValue (data: any, attrList: string[]) {
       targetValue = parentValue[key]
       return
     }
-    parentValue = parentValue[key] || {}
+    parentValue[key] = parentValue[key] || {}
+    parentValue = parentValue[key]
   })
+
   return [targetValue, parentValue]
 }
 function createOrGet (data: any, attrList: string[]) {
-  let [targetValue, _] = createAndReturnValue(data, attrList)
+  let [targetValue, ] = createAndReturnValue(data, attrList)
   return targetValue
 }
 function createOrSet (data: any, attrList: string[], value: any) {
-  let [_, parentValue] = createAndReturnValue(data, attrList)
+  let [, parentValue] = createAndReturnValue(data, attrList)
   parentValue[attrList[attrList.length-1]] = value
 }
 

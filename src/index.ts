@@ -20,7 +20,7 @@ const typeAlias: any = {
 }
 
 class TypeJSON implements IF_TypeJSON{
-  parse(target: any, types: IF_Types): any {
+  parse(target: any, types: IF_Types ={}): any {
     target = merge(true, target)
     let output:any = {}
     Object.keys(target).forEach(function (key) {
