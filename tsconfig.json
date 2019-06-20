@@ -12,8 +12,8 @@
     "target": "ES5",
     "sourceMap": true,
     "outDir": "./lib",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "allowJs": true
   },
-  "exclude": ["node_modules", "lib", "jest.config.js"]
+  "exclude": ["node_modules", "lib", "jest.config.js", "coverage", "*.test.ts", "interface.ts"]
 }
