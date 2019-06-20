@@ -311,22 +311,6 @@ test('not find type', () => {
 })
 
 
-test('deep level array', () => {
-
-  let data: any = {
-
-  }
-  let types: IF_Types = {
-    "some?": "array",
-    "some.*?": "object",
-    "some.*.abc": "string",
-  }
-  let output: any = {
-    some: []
-  }
-  expect(tjson.parse(data, types)).toEqual(output)
-})
-
 
 test('data have types', () => {
 
@@ -391,4 +375,93 @@ test('emptyObject.emptyObject.defaultValue?', () => {
       }
     }
   )
+})
+
+
+test('object.*? string', () => {
+  expect(
+    tjson.parse({
+      list: [
+        'abc'
+      ],
+      '|list.*?': 'string'
+    })
+  ).toEqual(
+    {"list": ['abc']}
+  )
+})
+
+test('object.*? string throw error', () => {
+  expect(function () {
+      tjson.parse({
+        list: [
+          123
+        ],
+        '|list.*?': 'string'
+      })
+  }).toThrow(
+    new Error('typejson: list(ARRAY_ITEM)(number) is not a string')
+  )
+})
+
+test('deep level array', () => {
+
+  let data: any = {
+    some: [
+      {}
+    ]
+  }
+  let types: IF_Types = {
+    "some?": "array",
+    "some.*?": "object",
+    "some.*.title?": "string",
+  }
+  let output: any = {
+    some: [
+      {
+        title: ''
+      }
+    ]
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
+})
+
+
+test('deep level array list', () => {
+
+  let data: any = {
+    list: [
+      {
+        title: "1 some",
+        author: {
+          name: "nimo",
+          age: 27
+        }
+      },
+      {
+        title: "2 some",
+        hot: true,
+        author: {
+          name: "nico",
+          age: 18
+        }
+      }
+    ]
+  }
+  let types: IF_Types = {
+    "list": "array",
+    "list.*": "object",
+    "list.*.title": "string",
+    "list.*.hot?": "bool",
+    "list.*.author": "object",
+    "list.*.author.name": "string",
+    "list.*.author.age": "number",
+  }
+  let output: any =  {
+    list:[
+      { title: '1 some', hot: false,  author: {name: 'nimo', age: 27} },
+      { title: '2 some', hot: true,   author: {name: 'nico', age: 18} }
+    ]
+  }
+  expect(tjson.parse(data, types)).toEqual(output)
 })

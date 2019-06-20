@@ -1,5 +1,6 @@
 const gettype = require("typeof")
 const merge = require('merge')
+const extend = require("safe-extend")
 import { IF_TypeJSON, IF_Types } from "./interface"
 import { createOrGet, createOrSet } from "./CRUD"
 
@@ -21,6 +22,7 @@ const typeAlias: any = {
 
 class TypeJSON implements IF_TypeJSON{
   parse(target: any, types: IF_Types ={}): any {
+    const self = this
     target = merge(true, target)
     let output:any = {}
     Object.keys(target).forEach(function (key) {
@@ -29,18 +31,52 @@ class TypeJSON implements IF_TypeJSON{
         delete target[key]
       }
     })
-    Object.keys(types).forEach((attr, index) => {
-      let sourceAttr: string = attr
-      if (sourceAttr.indexOf('*') !== -1) {
+    Object.keys(types).forEach((sourceAttr, index) => {
+      let typeItem: any = types[sourceAttr]
+      let path = sourceAttr.replace(/\?$/, '')
+      let attrList = path.split(".")
+      let leafNodeAttr: string = attrList[attrList.length-1]
+      let arraySymbolIndex = path.indexOf('*')
+      if (arraySymbolIndex !== -1) {
+        // prefixObjectPath = 'list.*' => 'list'
+        let prefixObjectPath: string = path.slice(0, arraySymbolIndex).replace(/\.$/, '')
+        // suffixArrayPath = 'list.*' => ''
+        //                        'list.*.title' => 'title'
+        let suffixArrayPath: string = path.slice(arraySymbolIndex+1, path.length).replace(/^\./, '')
+        let prefixObjectAttrList: string[] = prefixObjectPath.split('.')
+        let suffixArrayAttrList: string[] = suffixArrayPath.split('.')
+        let prefixArray:any = createOrGet(target, prefixObjectAttrList, [])
+        prefixArray = prefixArray.map(function (item: any) {
+          // if sourceAttr = "list.*" suffixArrayPath is ""
+          if (suffixArrayPath === "") {
+            let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
+            return self.parse(
+              {
+                // "list.*"
+                [subParseTempName]: item
+              },
+              {
+                [subParseTempName]: typeItem
+              }
+            )[subParseTempName]
+          }
+          else {
+            let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
+            return self.parse({
+              // "list.*"
+              [subParseTempName]: item
+            },
+            {
+              [subParseTempName + '.' + suffixArrayPath + (requried?'':'?')]: typeItem
+            })[subParseTempName]
+          }
+        })
+        createOrSet(output, prefixObjectAttrList, extend(true, createOrGet(output, prefixObjectAttrList, []), prefixArray))
         return
       }
-      attr = attr.replace(/\?$/, '')
-      let attrList = attr.split(".")
-      attr = attrList[attrList.length-1]
       // set safe value
       let value: any = createOrGet(target, attrList)
       let vartype: string = gettype(value)
-      let typeItem: any = types[sourceAttr]
       if (typeof typeItem === "string") {
         let typeItemStruct:any = {
           type: '',
@@ -64,11 +100,11 @@ class TypeJSON implements IF_TypeJSON{
       let requried = sourceAttr[sourceAttr.length-1] !== '?'
       let isUndefinedValue: boolean = (value === undefined)
       if (requried && isUndefinedValue) {
-        throw new Error(`typejson: attr: "${attr}" is requried and must be a ${typeItem.type}`)
+        throw new Error(`typejson: attr: "${leafNodeAttr}" is requried and must be a ${typeItem.type}`)
       }
       let hasDefault = typeItem.default !== undefined
       if (requried && hasDefault) {
-        console.warn(`typejson: attr: "${attr}" requried attr can not have default, maybe you should remove default or add "attr?"`)
+        console.warn(`typejson: attr: "${leafNodeAttr}" requried attr can not have default, maybe you should remove default or add "attr?"`)
       }
       let shouldSetDefaultValue = !requried && hasDefault
       let shouldSetEmptyValue: boolean

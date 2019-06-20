@@ -24,7 +24,9 @@
     ]
   },
   "dependencies": {
+    "deep-merge": "^1.0.0",
     "merge": "^1.2.1",
+    "safe-extend": "^3.0.6",
     "typeof": "^1.0.0"
   }
 }

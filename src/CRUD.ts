@@ -14,8 +14,13 @@ function createAndReturnValue (data: any, attrList: string[]) {
 
   return [targetValue, parentValue]
 }
-function createOrGet (data: any, attrList: string[]) {
-  let [targetValue, ] = createAndReturnValue(data, attrList)
+function createOrGet (data: any, attrList: string[], defaultValue:any=undefined) {
+  let [targetValue, parentValue] = createAndReturnValue(data, attrList)
+  if (defaultValue !== undefined && targetValue === undefined) {
+    let leafNodeAttr = attrList[attrList.length-1]
+    parentValue[leafNodeAttr] = defaultValue
+    return parentValue[leafNodeAttr]
+  }
   return targetValue
 }
 function createOrSet (data: any, attrList: string[], value: any) {
