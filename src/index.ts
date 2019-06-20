@@ -1,6 +1,7 @@
 const gettype = require("typeof")
-import { IF_TypeJSON, IF_Types } from "./interface"
 const merge = require('merge')
+import { IF_TypeJSON, IF_Types } from "./interface"
+import { createOrGet, createOrSet } from "./CRUD"
 
 const log = console.log
 
@@ -37,27 +38,13 @@ class TypeJSON implements IF_TypeJSON{
       let attrList = attr.split(".")
       attr = attrList[attrList.length-1]
       // set safe value
-      attrList.forEach(function (key, deep) {
-        let isLastKey: boolean = deep === attrList.length-1
-        let currentPathList = attrList.slice(0, deep+1)
-        if (isLastKey) {
-
-        }
-        else {
-          eval(`target.${currentPathList.join('.')} = target.${currentPathList.join('.')} || {}`)
-        }
-      })
-      let value: any = eval(`target.${attrList.join('.')}`)
+      let value: any = createOrGet(target, attrList)
       let vartype: string = gettype(value)
       let typeItem: any = types[sourceAttr]
       if (typeof typeItem === "string") {
-        interface IF_typeItemStruct {
-          type: string
-          note: string
-        }
-        let typeItemStruct:IF_typeItemStruct = {
+        let typeItemStruct:any = {
           type: '',
-          note: ''
+          note: '',
         }
         let typeAndNote = [];
         if (typeItem.indexOf('|') !== -1) {
@@ -119,7 +106,7 @@ class TypeJSON implements IF_TypeJSON{
       if (typeItem.regexp && !new RegExp(typeItem.regexp).test(value)) {
         throw new Error(`typejson: regexp: ${typeItem.regexp} can not match ${value}`)
       }
-      eval(`output.${attrList.join('.')} = value`)
+      createOrSet(output, attrList, value)
     })
     return output
   }
