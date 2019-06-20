@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --watch",
-    "test:c": "jest --coverage --watch"
+    "test:c": "jest --coverage",
+    "test:cw": "jest --coverage --watch"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

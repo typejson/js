@@ -33,6 +33,7 @@ class TypeJSON implements IF_TypeJSON{
     })
     Object.keys(types).forEach((sourceAttr, index) => {
       let typeItem: any = types[sourceAttr]
+      let requried = sourceAttr[sourceAttr.length-1] !== '?'
       let path = sourceAttr.replace(/\?$/, '')
       let attrList = path.split(".")
       let leafNodeAttr: string = attrList[attrList.length-1]
@@ -52,7 +53,6 @@ class TypeJSON implements IF_TypeJSON{
             let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
             return self.parse(
               {
-                // "list.*"
                 [subParseTempName]: item
               },
               {
@@ -63,7 +63,6 @@ class TypeJSON implements IF_TypeJSON{
           else {
             let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
             return self.parse({
-              // "list.*"
               [subParseTempName]: item
             },
             {
@@ -97,7 +96,6 @@ class TypeJSON implements IF_TypeJSON{
       if (typeItem.type === undefined) {
         throw new Error(`typejson: type must between ["${Object.keys(typeAlias).join('","')}"], can not be a ${typeItem.type}`)
       }
-      let requried = sourceAttr[sourceAttr.length-1] !== '?'
       let isUndefinedValue: boolean = (value === undefined)
       if (requried && isUndefinedValue) {
         throw new Error(`typejson: attr: "${leafNodeAttr}" is requried and must be a ${typeItem.type}`)
