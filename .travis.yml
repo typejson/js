@@ -10,6 +10,6 @@ only:
 - dev
 
 install:
-- yarn
+- npm i
 script:
 - npm test:c
