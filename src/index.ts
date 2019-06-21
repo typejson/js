@@ -1,5 +1,4 @@
 const gettype = require("typeof")
-const merge = require('merge')
 const extend = require("safe-extend")
 import { IF_TypeJSON, IF_Types } from "./interface"
 import { createOrGet, createOrSet } from "./CRUD"
@@ -23,7 +22,7 @@ const typeAlias: any = {
 class TypeJSON implements IF_TypeJSON{
   parse(target: any, types: IF_Types ={}): any {
     const self = this
-    target = merge(true, target)
+    target = extend.clone(target)
     let output:any = {}
     Object.keys(target).forEach(function (key) {
       if (key[0] === '|') {
