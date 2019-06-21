@@ -49,7 +49,7 @@ class TypeJSON implements IF_TypeJSON{
         prefixArray = prefixArray.map(function (item: any) {
           // if sourceAttr = "list.*" suffixArrayPath is ""
           if (suffixArrayPath === "") {
-            let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
+            let subParseTempName = `${prefixObjectPath.replace(/\./g, '(DOT)')}(ARRAY_ITEM)`
             return self.parse(
               {
                 [subParseTempName]: item
@@ -60,7 +60,7 @@ class TypeJSON implements IF_TypeJSON{
             )[subParseTempName]
           }
           else {
-            let subParseTempName = `${prefixObjectPath}(ARRAY_ITEM)`
+            let subParseTempName = `${prefixObjectPath.replace(/\./g, '(DOT)')}(ARRAY_ITEM)`
             return self.parse({
               [subParseTempName]: item
             },

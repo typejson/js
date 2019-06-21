@@ -538,3 +538,105 @@ test('deep level array list', () => {
   }
   expect(tjson.parse(data, types)).toEqual(output)
 })
+
+test('form.itemList.*?', () => {
+
+  let data: any = {
+  form: {
+    id: "",
+    itemList: [
+      {
+        project_id: '',
+        is_billing: 1,
+        billing_date: '',
+        invoice_path: {
+          id: '',
+          src: ''
+        },
+        is_receipt: 0,
+        receipt_date: '',
+        receipt_proof_path: {
+          id: '',
+          src: ''
+        },
+        is_settlement: 1,
+        settlement_path: {
+          id: '',
+          src: ''
+        },
+        settlement_date: '',
+      }
+    ],
+    remark: ''
+  },
+  '|form': 'object',
+  '|form.id': 'uuid',
+  '|form.itemList': 'array',
+  '|form.itemList.*?': 'object',
+  '|form.itemList.*.project_id?': 'uuid',
+
+  '|form.itemList.*.is_billing': 'bool',
+  '|form.itemList.*.billing_date': 'date',
+  '|form.itemList.*.invoice_path': 'object',
+  '|form.itemList.*.invoice_path.id': 'uuid',
+  '|form.itemList.*.invoice_path.src': 'url',
+
+
+  '|form.itemList.*.is_receipt': 'bool',
+  '|form.itemList.*.receipt_date': 'date',
+  '|form.itemList.*.receipt_proof_path': 'object',
+  '|form.itemList.*.receipt_proof_path.id': 'uuid',
+  '|form.itemList.*.receipt_proof_path.src': 'url',
+
+  '|form.itemList.*.is_settlement': 'bool',
+  '|form.itemList.*.settlement_date': 'date',
+  '|form.itemList.*.settlement_path': 'object',
+  '|form.itemList.*.settlement_path.id': 'uuid',
+  '|form.itemList.*.settlement_path.src': 'url',
+  '|form.remark': 'string',
+
+  options: {
+    project: [
+
+    ],
+  },
+  '|options': "object",
+  '|options.project': 'array',
+  '|options.project.*': 'object',
+  '|options.project.*.label': 'string| 广告标题',
+  '|options.project.*.value': 'string| 广告id',
+}
+  let output: any = {
+    "form": {
+      "id": "",
+      "itemList": [
+        {
+          "project_id": "",
+          "is_billing": true,
+          "billing_date": "",
+          "invoice_path": {
+            "id": "",
+            "src": ""
+          },
+          "is_receipt": false,
+          "receipt_date": "",
+          "receipt_proof_path": {
+            "id": "",
+            "src": ""
+          },
+          "is_settlement": true,
+          "settlement_path": {
+            "id": "",
+            "src": ""
+          },
+          "settlement_date": ""
+        }
+      ],
+      "remark": ""
+    },
+    "options": {
+      "project": []
+    }
+  }
+  expect(tjson.parse(data)).toEqual(output)
+})
