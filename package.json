@@ -1,6 +1,6 @@
 {
   "name": "typejson",
-  "version": "0.9.6",
+  "version": "0.9.8",
   "description": "typejson",
   "main": "lib/index.js",
   "repository": "https://github.com/typejson/js.git",

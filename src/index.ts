@@ -124,6 +124,18 @@ class TypeJSON implements IF_TypeJSON{
       if (shouldSetDefaultValue) {
         value = typeItem.default
       }
+      if (typeItem.type === "boolean" && vartype === "number") {
+        if (value !== 1 && value !== 0) {
+          throw new Error(`typejson: ${path} can not be ${JSON.stringify(value)}, must be a bool or "1" "0" 1 0`)
+        }
+        value = Boolean(value)
+      }
+      if (typeItem.type === "boolean" && vartype === "string") {
+        if (value !== "1" && value !== "0") {
+          throw new Error(`typejson: ${path} can not be ${JSON.stringify(value)}, must be a bool or "1" "0" 1 0`)
+        }
+        value = Boolean(Number(value))
+      }
       //  try transform value
       if (typeItem.type === "number" && vartype === "string") {
         let transValue = Number(value)
@@ -131,8 +143,9 @@ class TypeJSON implements IF_TypeJSON{
           throw new Error(`typejson: ${JSON.stringify(target)} attr is not a number`)
         }
         value = transValue
-        vartype = gettype(value)
       }
+      // 更新类型
+      vartype = gettype(value)
       if (requried && typeItem.type !== vartype) {
         throw new Error(`typejson: ${sourceAttr}(${vartype}) is not a ${typeItem.type}`)
       }

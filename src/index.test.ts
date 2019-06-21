@@ -37,6 +37,79 @@ test('type.bool? empty value', () => {
   let output:any = {hot: false}
   expect(tjson.parse(data, types)).toEqual(output);
 });
+
+test('type.number 1 transform bool', () => {
+
+  let data:any = {hot: 1}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:any = {hot: true}
+  expect(tjson.parse(data, types)).toEqual(output);
+});
+test('type.number 0 transform bool', () => {
+
+  let data:any = {hot: 0}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:any = {hot: false}
+  expect(tjson.parse(data, types)).toEqual(output);
+});
+
+test('type.number 2 transform bool throw errror', () => {
+
+  let data:any = {hot: 2}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:Error = new Error(`typejson: hot can not be 2, must be a bool or "1" "0" 1 0`)
+  expect(function () {
+    tjson.parse(data, types)
+  }).toThrow(output)
+});
+test('type.string "1" transform bool', () => {
+
+  let data:any = {hot: "1"}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:any = {hot: true}
+  expect(tjson.parse(data, types)).toEqual(output);
+})
+test('type.string "0" transform bool', () => {
+
+  let data:any = {hot: "0"}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:any = {hot: false}
+  expect(tjson.parse(data, types)).toEqual(output);
+});
+
+test('type.string "2" transform bool throw errror', () => {
+
+  let data:any = {hot: "2"}
+  let types: IF_Types = {
+    "hot": {
+      type: "bool"
+    }
+  }
+  let output:Error = new Error(`typejson: hot can not be "2", must be a bool or "1" "0" 1 0`)
+  expect(function () {
+    tjson.parse(data, types)
+  }).toThrow(output)
+})
 test('type.number string transform number', () => {
 
   let data:any = {"age": "1"}
