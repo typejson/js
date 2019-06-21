@@ -1,0 +1,15 @@
+language: node_js
+
+node_js:
+- "10.0"
+- "8.0"
+- "4.0"
+branches:
+only:
+- master
+- dev
+
+install:
+- yarn
+script:
+- npm test:c
