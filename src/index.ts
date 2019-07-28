@@ -1,11 +1,10 @@
 const gettype = require("typeof")
 const extend = require("safe-extend")
-import { IF_TypeJSON, IF_Types } from "./interface"
+import { TypeJSONClass, Types } from "./type"
 import { createOrGet, createOrSet } from "./CRUD"
 
 const log = console.log
-
-const typeAlias: any = {
+const TypeAliass: any = {
   "string": "string",
   "number": "number",
   "num": "number",
@@ -18,9 +17,49 @@ const typeAlias: any = {
   "bool": "boolean",
   "boolean": "boolean"
 }
+/*
+package typejson
 
-class TypeJSON implements IF_TypeJSON{
-  parse(target: any, types: IF_Types ={}): any {
+`import "typejson"`
+
+## Index
+
+class TypeJSON
+  func parse(target: any, types: Types = {}): any
+
+Type TypeJSONClass
+Type Types
+
+
+## class TypeJSON
+
+### func parse
+
+`parse(target: any, types: Types ={}): any`
+
+Use types parse object
+
+**Example**
+
+```ts
+// Validate required
+expect(function () {
+  tjson.parse({}, {
+    "name": {
+      type: "string"
+    }
+  })
+}).toThrow(
+  new Error(`typejson: attr: "name" is requried and must be a string`)
+)
+```
+
+*/
+
+// @tsdoc.org
+class TypeJSON implements TypeJSONClass{
+  // Use types parse object
+  parse(target: any, types: Types ={}): any {
     const self = this
     target = extend.clone(target)
     let output:any = {}
@@ -91,9 +130,9 @@ class TypeJSON implements IF_TypeJSON{
         }
         typeItem = typeItemStruct
       }
-      typeItem.type = typeAlias[typeItem.type]
+      typeItem.type = TypeAliass[typeItem.type]
       if (typeItem.type === undefined) {
-        throw new Error(`typejson: type must between ["${Object.keys(typeAlias).join('","')}"], can not be a ${typeItem.type}`)
+        throw new Error(`typejson: type must between ["${Object.keys(TypeAliass).join('","')}"], can not be a ${typeItem.type}`)
       }
       let isUndefinedValue: boolean = (value === undefined)
       if (requried && isUndefinedValue) {

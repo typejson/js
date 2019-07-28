@@ -1,24 +1,25 @@
 import { TypeJSON } from "./index"
-import { IF_Types } from "./interface"
+import { Types } from "./type"
 
 let tjson = new TypeJSON()
 test('type.string empty value', () => {
-
-  let data: any = {}
-  let types: IF_Types = {
-    "name": {
-      type: "string"
-    }
-  }
-  let output: Error = new Error(`typejson: attr: "name" is requried and must be a string`)
+  // @tsdoc <
+  // Validate required
   expect(function () {
-    tjson.parse(data, types)
-  }).toThrow(output);
+    tjson.parse({}, {
+      "name": {
+        type: "string"
+      }
+    })
+  }).toThrow(
+    new Error(`typejson: attr: "name" is requried and must be a string`)
+  )
+  // @tsdoc >
 });
 test('type.string? empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "name?": {
       type: "string"
     }
@@ -29,7 +30,7 @@ test('type.string? empty value', () => {
 test('type.bool? empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "hot?": {
       type: "bool"
     }
@@ -41,7 +42,7 @@ test('type.bool? empty value', () => {
 test('type.number 1 transform bool', () => {
 
   let data:any = {hot: 1}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -52,7 +53,7 @@ test('type.number 1 transform bool', () => {
 test('type.number 0 transform bool', () => {
 
   let data:any = {hot: 0}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -64,7 +65,7 @@ test('type.number 0 transform bool', () => {
 test('type.number 2 transform bool throw errror', () => {
 
   let data:any = {hot: 2}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -77,7 +78,7 @@ test('type.number 2 transform bool throw errror', () => {
 test('type.string "1" transform bool', () => {
 
   let data:any = {hot: "1"}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -88,7 +89,7 @@ test('type.string "1" transform bool', () => {
 test('type.string "0" transform bool', () => {
 
   let data:any = {hot: "0"}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -100,7 +101,7 @@ test('type.string "0" transform bool', () => {
 test('type.string "2" transform bool throw errror', () => {
 
   let data:any = {hot: "2"}
-  let types: IF_Types = {
+  let types: Types = {
     "hot": {
       type: "bool"
     }
@@ -113,7 +114,7 @@ test('type.string "2" transform bool throw errror', () => {
 test('type.number string transform number', () => {
 
   let data:any = {"age": "1"}
-  let types: IF_Types = {
+  let types: Types = {
     "age": {
       type: "number"
     }
@@ -124,7 +125,7 @@ test('type.number string transform number', () => {
 test('type.number string transform number throw error', () => {
 
   let data:any = {"age": "1e"}
-  let types: IF_Types = {
+  let types: Types = {
     "age": {
       type: "number"
     }
@@ -137,7 +138,7 @@ test('type.number string transform number throw error', () => {
 test('type.number empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "age": {
       type: "number"
     }
@@ -150,7 +151,7 @@ test('type.number empty value', () => {
 test('type.array empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "list": {
       type: "array"
     }
@@ -164,7 +165,7 @@ test('type.array empty value', () => {
 test('type.array? empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "list?": {
       type: "array"
     }
@@ -175,7 +176,7 @@ test('type.array? empty value', () => {
 test('type.object empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "map": {
       type: "object"
     }
@@ -189,7 +190,7 @@ test('type.object empty value', () => {
 test('type.object? empty value', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "map?": {
       type: "object"
     }
@@ -201,7 +202,7 @@ test('type.object? empty value', () => {
 test('string.default', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "status?": {
       type: "string",
       default: "normal"
@@ -214,7 +215,7 @@ test('string.default', () => {
 test('number.default', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "page?": {
       type: "number",
       default: 1
@@ -227,7 +228,7 @@ test('number.default', () => {
 test('bool.default', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "opened?": {
       type: "bool",
       default: true
@@ -240,7 +241,7 @@ test('bool.default', () => {
 test('array.default', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "list?": {
       type: "array",
       default: ["some"]
@@ -253,7 +254,7 @@ test('array.default', () => {
 test('object.default', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "map?": {
       type: "object",
       default: {
@@ -274,7 +275,7 @@ test('required and default warning', () => {
   let data: any = {
     name: "nimo"
   }
-  let types: IF_Types = {
+  let types: Types = {
     "name": {
       type: "string",
       default: "nico"
@@ -291,7 +292,7 @@ test('required and default warning', () => {
 test('deep level', () => {
 
   let data: any = {}
-  let types: IF_Types = {
+  let types: Types = {
     "person?": {
       type: "object"
     },
@@ -319,7 +320,7 @@ test('type|note', () => {
     some: "a",
     foo: 1
   }
-  let types: IF_Types = {
+  let types: Types = {
     "some": "string | 解释",
     "foo": "number|解释2"
   }
@@ -335,7 +336,7 @@ test('error type', () => {
   let data: any = {
     list: "abc"
   }
-  let types: IF_Types = {
+  let types: Types = {
     "list": "array"
   }
   let output:Error = new Error(`typejson: list(string) is not a array`)
@@ -349,7 +350,7 @@ test('type alias', () => {
   let data: any = {
 
   }
-  let types: IF_Types = {
+  let types: Types = {
     "date?": "date",
     "url?": "url",
     "uri?": "uri",
@@ -374,7 +375,7 @@ test('not find type', () => {
   let data: any = {
 
   }
-  let types: IF_Types = {
+  let types: Types = {
     "id?": "nobody"
   }
   let output:Error = new Error(`typejson: type must between ["string","number","num","object","array","uuid","date","url","uri","bool","boolean"], can not be a undefined`)
@@ -392,7 +393,7 @@ test('data have types', () => {
       type: "string"
     }
   }
-  let types: IF_Types = {}
+  let types: Types = {}
   let output:any = {"name": ""}
   expect(tjson.parse(data, types)).toEqual(output);
 });
@@ -403,7 +404,7 @@ test('omit types', () => {
       type: "string"
     }
   }
-  let types: IF_Types = {}
+  let types: Types = {}
   let output:any = {"name": ""}
   expect(tjson.parse(data)).toEqual(output);
 })
@@ -413,7 +414,7 @@ test('regexp', () => {
   let data: any = {
     name: "nimo"
   }
-  let types: IF_Types = {
+  let types: Types = {
     name: {
       type: "string",
       regexp: "nimo"
@@ -484,7 +485,7 @@ test('deep level array', () => {
       {}
     ]
   }
-  let types: IF_Types = {
+  let types: Types = {
     "some?": "array",
     "some.*?": "object",
     "some.*.title?": "string",
@@ -521,7 +522,7 @@ test('deep level array list', () => {
       }
     ]
   }
-  let types: IF_Types = {
+  let types: Types = {
     "list": "array",
     "list.*": "object",
     "list.*.title": "string",
